@@ -1,0 +1,46 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: blog-hugo
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blog-hugo
+  namespace: blog-hugo
+spec:
+  selector:
+    matchLabels:
+      app: blog-hugo
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: blog-hugo
+    spec:
+      containers:
+      - name: blog-hugo
+        image: ghcr.io/sakrist/blog
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+      imagePullSecrets:
+      - name: ghcr
+---
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: blog-hugo
+  name: blog-hugo
+  namespace: blog-hugo
+spec:
+  ports:
+  - name: 80-8080
+    port: 8080
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: blog-hugo
+  type: LoadBalancer

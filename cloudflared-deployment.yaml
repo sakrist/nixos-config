@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: cloudflared
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cloudflared-blog
+  namespace: cloudflared
+  labels:
+    app: cloudflared-blog
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cloudflared-blog
+  template:
+    metadata:
+      labels:
+        app: cloudflared-blog
+    spec:
+      containers:
+      - name: cloudflared
+        image: cloudflare/cloudflared:latest
+        args:
+          - tunnel
+          - --no-autoupdate
+          - --protocol=quic
+          - run
+          - --url=http://blog-hugo.blog-hugo.svc.cluster.local:8080
+        env:
+        - name: TUNNEL_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: cloudflared-token
+              key: token
