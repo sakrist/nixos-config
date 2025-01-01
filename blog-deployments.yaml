@@ -9,10 +9,10 @@ metadata:
   name: blog-hugo
   namespace: blog-hugo
 spec:
+  replicas: 3  # Set the desired number of replicas
   selector:
     matchLabels:
       app: blog-hugo
-  replicas: 1
   template:
     metadata:
       labels:
@@ -30,17 +30,16 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  creationTimestamp: null
-  labels:
-    app: blog-hugo
   name: blog-hugo
   namespace: blog-hugo
+  labels:
+    app: blog-hugo
 spec:
   ports:
   - name: 80-8080
-    port: 8080
+    port: 8080  # Exposed service port
+    targetPort: 80  # Port inside the container
     protocol: TCP
-    targetPort: 80
   selector:
     app: blog-hugo
-  type: LoadBalancer
+  type: LoadBalancer  # Expose the service externally

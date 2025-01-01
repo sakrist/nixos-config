@@ -11,7 +11,7 @@ metadata:
   labels:
     app: cloudflared-blog
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: cloudflared-blog
