@@ -1,0 +1,19 @@
+
+
+how to deploy deployments 
+
+kubectl apply -f webhook-deployment.yaml
+
+
+create virtual env 
+python3 -m venv venv
+
+
+create .env with 
+
+GH_USERNAME=
+GH_BLOG_IMAGE_NAME=
+GH_TOKEN=
+CLOUDFLARE_API_TOKEN=
+CLOUDFLARE_ZONEID=
+
