@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
       - name: habit-landing
-        image: ghcr.io/sakrist/habit-app-landingpage
+        image: ghcr.io/sakrist/habit-app-landingpage:f9217b8
         imagePullPolicy: Always
         ports:
         - containerPort: 80
