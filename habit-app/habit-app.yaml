@@ -100,6 +100,8 @@ spec:
         volumeMounts:
         - name: postgres-data
           mountPath: /var/lib/postgresql/data
+      nodeSelector:
+        kubernetes.io/hostname: nixosmac
       volumes:
       - name: postgres-data
         persistentVolumeClaim:

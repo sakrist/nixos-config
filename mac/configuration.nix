@@ -104,6 +104,7 @@
   environment.systemPackages = with pkgs; [
   #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
   #  wget
+  powertop python3 nfs-utils
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -132,7 +133,7 @@
   # networking.firewall.allowedTCPPorts = [ ... ];
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
+  networking.firewall.enable = false;
 
   services.k3s = {  
     enable = true;
