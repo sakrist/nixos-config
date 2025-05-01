@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
       - name: blog-hugo
-        image: ghcr.io/sakrist/blog
+        image: ghcr.io/sakrist/blog:1b6bd3e
         imagePullPolicy: Always
         ports:
         - containerPort: 80
