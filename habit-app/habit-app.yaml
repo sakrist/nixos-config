@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
       - name: habit-landing
-        image: ghcr.io/sakrist/habit-app-landingpage:1309df1
+        image: ghcr.io/sakrist/habit-app-landingpage:7038206
         imagePullPolicy: Always
         ports:
         - containerPort: 80
@@ -43,130 +43,130 @@ spec:
   selector:
     app: habit-landing
   type: LoadBalancer
----
-# PostgreSQL 17 PVC for persistent storage
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: habit-postgres-pvc
-  namespace: habit-web
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 1Gi
----
-# PostgreSQL 17 Deployment
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: habit-postgres
-  namespace: habit-web
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      app: habit-postgres
-  template:
-    metadata:
-      labels:
-        app: habit-postgres
-    spec:
-      containers:
-      - name: postgres
-        image: postgres:17
-        ports:
-        - containerPort: 5432
-        env:
-        - name: POSTGRES_USER
-          valueFrom:
-            secretKeyRef:
-              name: habit-waitlist-secrets
-              key: DATABASE_USERNAME
+# ---
+# # PostgreSQL 17 PVC for persistent storage
+# apiVersion: v1
+# kind: PersistentVolumeClaim
+# metadata:
+#   name: habit-postgres-pvc
+#   namespace: habit-web
+# spec:
+#   accessModes:
+#     - ReadWriteOnce
+#   resources:
+#     requests:
+#       storage: 1Gi
+# ---
+# # PostgreSQL 17 Deployment
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: habit-postgres
+#   namespace: habit-web
+# spec:
+#   replicas: 1
+#   selector:
+#     matchLabels:
+#       app: habit-postgres
+#   template:
+#     metadata:
+#       labels:
+#         app: habit-postgres
+#     spec:
+#       containers:
+#       - name: postgres
+#         image: postgres:17
+#         ports:
+#         - containerPort: 5432
+#         env:
+#         - name: POSTGRES_USER
+#           valueFrom:
+#             secretKeyRef:
+#               name: habit-waitlist-secrets
+#               key: DATABASE_USERNAME
 
-        - name: POSTGRES_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: habit-waitlist-secrets
-              key: DATABASE_PASSWORD
+#         - name: POSTGRES_PASSWORD
+#           valueFrom:
+#             secretKeyRef:
+#               name: habit-waitlist-secrets
+#               key: DATABASE_PASSWORD
 
-        - name: POSTGRES_DB
-          valueFrom:
-            secretKeyRef:
-              name: habit-waitlist-secrets
-              key: DATABASE_NAME
+#         - name: POSTGRES_DB
+#           valueFrom:
+#             secretKeyRef:
+#               name: habit-waitlist-secrets
+#               key: DATABASE_NAME
 
-        volumeMounts:
-        - name: postgres-data
-          mountPath: /var/lib/postgresql/data
-      nodeSelector:
-        kubernetes.io/hostname: nixosmac
-      volumes:
-      - name: postgres-data
-        persistentVolumeClaim:
-          claimName: habit-postgres-pvc
----
-# PostgreSQL Service
-apiVersion: v1
-kind: Service
-metadata:
-  name: habit-postgres
-  namespace: habit-web
-  labels:
-    app: habit-postgres
-spec:
-  ports:
-  - port: 5432
-    targetPort: 5432
-    protocol: TCP
-  selector:
-    app: habit-postgres
-  # Using ClusterIP as we only need internal access to the database
-  type: ClusterIP
----
-# Habit Waitlist Service Deployment
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: habit-waitlist-service
-  namespace: habit-web
-spec:
-  replicas: 2
-  selector:
-    matchLabels:
-      app: habit-waitlist-service
-  template:
-    metadata:
-      labels:
-        app: habit-waitlist-service
-    spec:
-      containers:
-      - name: habit-waitlist-service
-        image: ghcr.io/sakrist/habit-waitlist-service:cdaae66
-        imagePullPolicy: Always
-        ports:
-        - containerPort: 8080
-        envFrom:
-        - secretRef:
-            name: habit-waitlist-secrets
-      imagePullSecrets:
-      - name: ghcr
----
-# Habit Waitlist Service
-apiVersion: v1
-kind: Service
-metadata:
-  name: habit-waitlist-service
-  namespace: habit-web
-  labels:
-    app: habit-waitlist-service
-spec:
-  ports:
-  - name: http
-    port: 8082
-    targetPort: 8080
-    protocol: TCP
-  selector:
-    app: habit-waitlist-service
-  type: LoadBalancer
+#         volumeMounts:
+#         - name: postgres-data
+#           mountPath: /var/lib/postgresql/data
+#       nodeSelector:
+#         kubernetes.io/hostname: nixosmac
+#       volumes:
+#       - name: postgres-data
+#         persistentVolumeClaim:
+#           claimName: habit-postgres-pvc
+# ---
+# # PostgreSQL Service
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: habit-postgres
+#   namespace: habit-web
+#   labels:
+#     app: habit-postgres
+# spec:
+#   ports:
+#   - port: 5432
+#     targetPort: 5432
+#     protocol: TCP
+#   selector:
+#     app: habit-postgres
+#   # Using ClusterIP as we only need internal access to the database
+#   type: ClusterIP
+# ---
+# # Habit Waitlist Service Deployment
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: habit-waitlist-service
+#   namespace: habit-web
+# spec:
+#   replicas: 2
+#   selector:
+#     matchLabels:
+#       app: habit-waitlist-service
+#   template:
+#     metadata:
+#       labels:
+#         app: habit-waitlist-service
+#     spec:
+#       containers:
+#       - name: habit-waitlist-service
+#         image: ghcr.io/sakrist/habit-waitlist-service:cdaae66
+#         imagePullPolicy: Always
+#         ports:
+#         - containerPort: 8080
+#         envFrom:
+#         - secretRef:
+#             name: habit-waitlist-secrets
+#       imagePullSecrets:
+#       - name: ghcr
+# ---
+# # Habit Waitlist Service
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: habit-waitlist-service
+#   namespace: habit-web
+#   labels:
+#     app: habit-waitlist-service
+# spec:
+#   ports:
+#   - name: http
+#     port: 8082
+#     targetPort: 8080
+#     protocol: TCP
+#   selector:
+#     app: habit-waitlist-service
+#   type: LoadBalancer

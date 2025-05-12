@@ -89,11 +89,19 @@
   powerManagement.powertop.enable = true;
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.mac = {
-    isNormalUser = true;
-    description = "vb";
-    extraGroups = [ "networkmanager" "wheel" ];
-    packages = with pkgs; [];
+  users.users = {
+    mac = {
+      isNormalUser = true;
+      description = "vb";
+      extraGroups = [ "networkmanager" "wheel" ];
+      packages = with pkgs; [];
+    };
+    nix = {
+     isNormalUser = true;
+     description = "vb";
+     extraGroups = [ "networkmanager" "wheel" ];
+     packages = with pkgs; [];
+   };
   };
 
   # Allow unfree packages
