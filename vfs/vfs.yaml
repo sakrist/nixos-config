@@ -1,0 +1,46 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: vfs-web
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vfs-page
+  namespace: vfs-web
+spec:
+  replicas: 3  # Set the desired number of replicas
+  selector:
+    matchLabels:
+      app: vfs-page
+  template:
+    metadata:
+      labels:
+        app: vfs-page
+    spec:
+      containers:
+      - name: vfs-page
+        image: ghcr.io/sakrist/visionfitstudio.pt:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+      imagePullSecrets:
+      - name: ghcr
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vfs-page
+  namespace: vfs-web
+  labels:
+    app: vfs-page
+spec:
+  ports:
+  - name: 80-8084
+    port: 8084  # Exposed service port
+    targetPort: 80  # Port inside the container
+    protocol: TCP
+  selector:
+    app: vfs-page
+  type: LoadBalancer
+  
