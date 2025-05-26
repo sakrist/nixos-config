@@ -8,6 +8,11 @@ kind: Deployment
 metadata:
   name: vfs-page
   namespace: vfs-web
+  annotations:
+    argocd-image-updater.argoproj.io/image-list: ghcr.io/sakrist/visionfitstudio.ie
+    argocd-image-updater.argoproj.io/vfs-page.update-strategy: latest
+    argocd-image-updater.argoproj.io/vfs-page.allow-tags: regexp:^latest$
+    argocd-image-updater.argoproj.io/write-back-method: argocd
 spec:
   replicas: 3  # Set the desired number of replicas
   selector:
