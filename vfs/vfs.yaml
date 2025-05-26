@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
       - name: vfs-page
-        image: ghcr.io/sakrist/visionfitstudio.pt:latest
+        image: ghcr.io/sakrist/visionfitstudio.ie:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 80
